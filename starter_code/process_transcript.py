@@ -98,11 +98,12 @@ def clean_transcript(file_path):
     doc = UnifiedDocument(
         document_id="transcript-001",
         content=f"Cleaned Transcript: {cleaned_text}",
-        source_type="Transcript",
+        source_type="Video",  # Classified as video since it's audio transcript
         author="Unknown Speaker",
         timestamp=datetime.now(),
         source_metadata={
-            "prices_mentioned_vnd": price_mentions,
+            "detected_price_vnd": price_mentions[0] if price_mentions else None,  # Primary price for forensic check
+            "prices_mentioned_vnd": price_mentions,  # All prices found
             "price_count": len(price_mentions),
             "original_file": "demo_transcript.txt",
             "extraction_method": "Gemini AI + regex"
