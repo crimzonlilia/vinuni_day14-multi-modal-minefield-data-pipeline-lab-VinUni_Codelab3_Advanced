@@ -1,17 +1,13 @@
 import pandas as pd
 import re
-<<<<<<< HEAD
-=======
 from datetime import datetime
 from schema import UnifiedDocument
->>>>>>> 731cb926a70ddecec678c5e277bf1d4f64f97c1a
 
 # ==========================================
 # ROLE 2: ETL/ELT BUILDER
 # ==========================================
 # Task: Process sales records, handling type traps and duplicates.
 
-<<<<<<< HEAD
 def _clean_price(price_str):
     """Convert various price formats to float."""
     if not price_str or price_str in ['N/A', 'Liên hệ', 'NULL', 'None']:
@@ -143,7 +139,6 @@ def process_sales_csv(file_path):
     print(f"  Processed {len(documents)} valid CSV records (removed {len(df) - len(documents)} duplicates/invalid)")
     
     return documents
-=======
 def clean_price(price_str):
     """
     Convert various price formats to float.
@@ -258,5 +253,4 @@ def process_sales_csv(file_path):
         result.append(doc.model_dump())
     
     return result
->>>>>>> 731cb926a70ddecec678c5e277bf1d4f64f97c1a
 

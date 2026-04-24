@@ -13,7 +13,6 @@ def parse_html_catalog(file_path):
         soup = BeautifulSoup(f, 'html.parser')
     # ------------------------------------------
     
-<<<<<<< HEAD
     # Find the table with id 'main-catalog'
     table = soup.find('table', id='main-catalog')
     if not table:
@@ -64,7 +63,6 @@ def parse_html_catalog(file_path):
     print(f"  Extracted {len(documents)} products from HTML catalog")
     
     return documents
-=======
     # Use BeautifulSoup to find the table with id 'main-catalog'
     catalog_table = soup.find('table', {'id': 'main-catalog'})
     
@@ -144,5 +142,4 @@ def parse_html_catalog(file_path):
         result.append(doc.model_dump())
     
     return result
->>>>>>> 731cb926a70ddecec678c5e277bf1d4f64f97c1a
 

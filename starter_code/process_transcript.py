@@ -59,7 +59,6 @@ def clean_transcript(file_path):
         text = f.read()
     # ------------------------------------------
     
-<<<<<<< HEAD
     # --- Extract metadata before cleaning ---
     
     # Extract any prices mentioned (pattern: number + VND or USD)
@@ -109,7 +108,6 @@ def clean_transcript(file_path):
     print(f"  Cleaned transcript: {len(cleaned)} chars, detected price: {detected_price_vnd} VND")
     
     return [doc]
-=======
     # Remove timestamps like [00:00:00]
     cleaned_text = re.sub(r'\[\d{2}:\d{2}:\d{2}\]', '', text)
     
@@ -162,5 +160,4 @@ def clean_transcript(file_path):
     )
     
     return doc.model_dump()
->>>>>>> 731cb926a70ddecec678c5e277bf1d4f64f97c1a
 

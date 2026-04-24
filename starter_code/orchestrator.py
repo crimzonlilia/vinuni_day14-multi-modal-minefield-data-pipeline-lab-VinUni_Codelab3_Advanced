@@ -122,8 +122,6 @@ def main():
                 kb_data.append(doc)
         json.dump(kb_data, f, ensure_ascii=False, indent=2)
     
-<<<<<<< HEAD
-=======
     # Example:
     # doc = extract_pdf_data(pdf_path)
     # if doc and run_quality_gate(doc):
@@ -146,7 +144,6 @@ def main():
         except Exception as e:
             print(f"Error processing {file_path}: {e}")
 
->>>>>>> 731cb926a70ddecec678c5e277bf1d4f64f97c1a
     end_time = time.time()
     print(f"\n[ORCHESTRATOR] Pipeline finished in {end_time - start_time:.2f} seconds.")
     print(f"[ORCHESTRATOR] Total valid documents stored: {len(final_kb)}")

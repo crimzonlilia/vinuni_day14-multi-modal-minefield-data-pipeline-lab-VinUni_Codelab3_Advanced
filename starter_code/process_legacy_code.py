@@ -1,10 +1,7 @@
 import ast
 import re
-<<<<<<< HEAD
-=======
 from schema import UnifiedDocument
 from datetime import datetime
->>>>>>> 731cb926a70ddecec678c5e277bf1d4f64f97c1a
 
 # ==========================================
 # ROLE 2: ETL/ELT BUILDER
@@ -17,7 +14,6 @@ def extract_logic_from_code(file_path):
         source_code = f.read()
     # ------------------------------------------
     
-<<<<<<< HEAD
     try:
         tree = ast.parse(source_code)
     except SyntaxError:
@@ -73,7 +69,6 @@ def extract_logic_from_code(file_path):
     print(f"  Extracted {len(business_rules)} business rules from legacy code")
     
     return doc
-=======
     # Use the 'ast' module to find docstrings for functions
     try:
         tree = ast.parse(source_code)
@@ -122,5 +117,4 @@ def extract_logic_from_code(file_path):
     )
     
     return doc.model_dump()
->>>>>>> 731cb926a70ddecec678c5e277bf1d4f64f97c1a
 
