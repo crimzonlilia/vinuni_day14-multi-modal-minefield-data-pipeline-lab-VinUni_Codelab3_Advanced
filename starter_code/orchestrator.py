@@ -44,6 +44,23 @@ def main():
     # if doc and run_quality_gate(doc):
     #     final_kb.append(doc)
 
+    for file_path, processor in [
+        (pdf_path, extract_pdf_data),
+        (trans_path, clean_transcript),
+        (html_path, parse_html_catalog),
+        (csv_path, process_sales_csv),
+        (code_path, extract_logic_from_code)
+    ]:
+        print(f"Processing {file_path} with {processor.__name__}...")
+        try:
+            doc = processor(file_path)
+            if doc and run_quality_gate(doc):
+                final_kb.append(doc)
+            else:
+                print(f"Document from {file_path} failed quality gate.")
+        except Exception as e:
+            print(f"Error processing {file_path}: {e}")
+
     end_time = time.time()
     print(f"Pipeline finished in {end_time - start_time:.2f} seconds.")
     print(f"Total valid documents stored: {len(final_kb)}")
