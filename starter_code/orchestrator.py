@@ -122,6 +122,31 @@ def main():
                 kb_data.append(doc)
         json.dump(kb_data, f, ensure_ascii=False, indent=2)
     
+<<<<<<< HEAD
+=======
+    # Example:
+    # doc = extract_pdf_data(pdf_path)
+    # if doc and run_quality_gate(doc):
+    #     final_kb.append(doc)
+
+    for file_path, processor in [
+        (pdf_path, extract_pdf_data),
+        (trans_path, clean_transcript),
+        (html_path, parse_html_catalog),
+        (csv_path, process_sales_csv),
+        (code_path, extract_logic_from_code)
+    ]:
+        print(f"Processing {file_path} with {processor.__name__}...")
+        try:
+            doc = processor(file_path)
+            if doc and run_quality_gate(doc):
+                final_kb.append(doc)
+            else:
+                print(f"Document from {file_path} failed quality gate.")
+        except Exception as e:
+            print(f"Error processing {file_path}: {e}")
+
+>>>>>>> 731cb926a70ddecec678c5e277bf1d4f64f97c1a
     end_time = time.time()
     print(f"\n[ORCHESTRATOR] Pipeline finished in {end_time - start_time:.2f} seconds.")
     print(f"[ORCHESTRATOR] Total valid documents stored: {len(final_kb)}")
