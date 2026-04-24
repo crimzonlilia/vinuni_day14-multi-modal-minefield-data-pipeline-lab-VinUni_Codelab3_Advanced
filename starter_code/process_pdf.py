@@ -1,12 +1,17 @@
-import google.generativeai as genai
 import os
 import json
 from dotenv import load_dotenv
 from schema import UnifiedDocument
 from datetime import datetime
 
-load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+try:
+    import google.generativeai as genai
+    load_dotenv()
+    GENAI_AVAILABLE = os.getenv("GEMINI_API_KEY") is not None
+    if GENAI_AVAILABLE:
+        genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+except (ImportError, Exception):
+    GENAI_AVAILABLE = False
 
 def extract_pdf_data(file_path):
     """Extract data from PDF using Gemini API and return UnifiedDocument."""
@@ -17,14 +22,20 @@ def extract_pdf_data(file_path):
     # Use gemini-2.0-flash or latest available model
     model = genai.GenerativeModel('gemini-2.0-flash')
     
-    print(f"Uploading {file_path} to Gemini...")
-    try:
-        pdf_file = genai.upload_file(path=file_path)
-    except Exception as e:
-        print(f"Failed to upload file to Gemini: {e}")
+    if not GENAI_AVAILABLE:
+        print(f"  Skipping PDF processing: Gemini API not available")
         return None
+    
+    try:
+        # Thay đổi model name để tránh lỗi 404 trên các phiên bản API cũ
+        model = genai.GenerativeModel('gemini-2.5-flash')
         
-    prompt = """
+        print(f"Uploading {file_path} to Gemini...")
+        pdf_file = genai.upload_file(path=file_path)
+        
+        prompt = """
+Analyze this document and extract a summary and the author. 
+Output exactly as a JSON object matching this exact format:
 Analyze this PDF document and extract the following information:
 1. Title
 2. Author (if available)
@@ -37,42 +48,22 @@ Provide your response as a JSON object with this exact structure:
     "summary": "[3-sentence summary]"
 }
 """
-    
-    print("Generating content from PDF using Gemini...")
-    try:
+        
+        print("Generating content from PDF using Gemini...")
         response = model.generate_content([pdf_file, prompt])
         content_text = response.text
+        
+        # Simple cleanup if the response is wrapped in markdown json block
+        if content_text.startswith("```json"):
+            content_text = content_text[7:]
+        if content_text.endswith("```"):
+            content_text = content_text[:-3]
+        if content_text.startswith("```"):
+            content_text = content_text[3:]
+            
+        extracted_data = json.loads(content_text.strip())
+        return extracted_data
+    
     except Exception as e:
-        print(f"Error generating content: {e}")
+        print(f"  Error processing PDF with Gemini: {e}")
         return None
-    
-    # Clean up markdown code blocks if present
-    if content_text.startswith("```json"):
-        content_text = content_text[7:]
-    if content_text.startswith("```"):
-        content_text = content_text[3:]
-    if content_text.endswith("```"):
-        content_text = content_text[:-3]
-    
-    content_text = content_text.strip()
-    
-    try:
-        pdf_info = json.loads(content_text)
-    except json.JSONDecodeError as e:
-        print(f"Error parsing JSON response: {e}")
-        return None
-    
-    # Build UnifiedDocument
-    doc = UnifiedDocument(
-        document_id="pdf-lecture-001",
-        content=f"Title: {pdf_info.get('title', 'Unknown')}\n\nSummary: {pdf_info.get('summary', 'No summary available')}",
-        source_type="PDF",
-        author=pdf_info.get('author', 'Unknown'),
-        timestamp=datetime.now(),
-        source_metadata={
-            "title": pdf_info.get('title', 'Unknown'),
-            "original_file": "lecture_notes.pdf"
-        }
-    )
-    
-    return doc.model_dump()

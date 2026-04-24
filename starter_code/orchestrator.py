@@ -35,9 +35,92 @@ def main():
     output_path = os.path.join(os.path.dirname(SCRIPT_DIR), "processed_knowledge_base.json")
     # ----------------------------------------------
 
-    # TODO: Call each processing function (extract_pdf_data, clean_transcript, etc.)
-    # TODO: Run quality gates (run_quality_gate) before adding to final_kb
-    # TODO: Save final_kb to output_path using json.dump
+    print("[ORCHESTRATOR] Starting pipeline...")
+    
+    # Process 1: PDF (if exists)
+    if os.path.exists(pdf_path):
+        print("\n[STEP 1] Processing PDF...")
+        try:
+            doc = extract_pdf_data(pdf_path)
+            if doc and run_quality_gate(doc):
+                final_kb.append(doc)
+                print(f"  [PASS] PDF added to KB")
+            else:
+                print(f"  [SKIP] PDF rejected by quality gate")
+        except Exception as e:
+            print(f"  [ERROR] Error processing PDF: {e}")
+    
+    # Process 2: Transcript
+    if os.path.exists(trans_path):
+        print("\n[STEP 2] Processing Transcript...")
+        try:
+            docs = clean_transcript(trans_path)
+            if docs:
+                for doc in docs:
+                    if run_quality_gate(doc):
+                        final_kb.append(doc)
+                        print(f"  [PASS] Transcript doc '{doc.get('document_id')}' added to KB")
+                    else:
+                        print(f"  [SKIP] Transcript doc rejected by quality gate")
+        except Exception as e:
+            print(f"  [ERROR] Error processing transcript: {e}")
+    
+    # Process 3: HTML
+    if os.path.exists(html_path):
+        print("\n[STEP 3] Processing HTML...")
+        try:
+            docs = parse_html_catalog(html_path)
+            if docs:
+                for doc in docs:
+                    if run_quality_gate(doc):
+                        final_kb.append(doc)
+                        print(f"  [PASS] HTML doc '{doc.get('document_id')}' added to KB")
+                    else:
+                        print(f"  [SKIP] HTML doc rejected by quality gate")
+        except Exception as e:
+            print(f"  [ERROR] Error processing HTML: {e}")
+    
+    # Process 4: CSV
+    if os.path.exists(csv_path):
+        print("\n[STEP 4] Processing CSV...")
+        try:
+            docs = process_sales_csv(csv_path)
+            if docs:
+                for doc in docs:
+                    if run_quality_gate(doc):
+                        final_kb.append(doc)
+                        print(f"  [PASS] CSV doc '{doc.get('document_id')}' added to KB")
+                    else:
+                        print(f"  [SKIP] CSV doc rejected by quality gate")
+        except Exception as e:
+            print(f"  [ERROR] Error processing CSV: {e}")
+    
+    # Process 5: Legacy Code
+    if os.path.exists(code_path):
+        print("\n[STEP 5] Processing Legacy Code...")
+        try:
+            doc = extract_logic_from_code(code_path)
+            if doc and run_quality_gate(doc):
+                final_kb.append(doc)
+                print(f"  [PASS] Legacy code doc added to KB")
+            else:
+                print(f"  [SKIP] Legacy code doc rejected by quality gate")
+        except Exception as e:
+            print(f"  [ERROR] Error processing legacy code: {e}")
+    
+    # --- SAVE RESULTS ---
+    print(f"\n[ORCHESTRATOR] Saving {len(final_kb)} documents to {output_path}...")
+    with open(output_path, 'w', encoding='utf-8') as f:
+        # Convert UnifiedDocument objects to dicts if needed
+        kb_data = []
+        for doc in final_kb:
+            if isinstance(doc, UnifiedDocument):
+                kb_data.append(doc.dict())
+            elif isinstance(doc, dict):
+                kb_data.append(doc)
+            else:
+                kb_data.append(doc)
+        json.dump(kb_data, f, ensure_ascii=False, indent=2)
     
     # Example:
     # doc = extract_pdf_data(pdf_path)
@@ -62,8 +145,8 @@ def main():
             print(f"Error processing {file_path}: {e}")
 
     end_time = time.time()
-    print(f"Pipeline finished in {end_time - start_time:.2f} seconds.")
-    print(f"Total valid documents stored: {len(final_kb)}")
+    print(f"\n[ORCHESTRATOR] Pipeline finished in {end_time - start_time:.2f} seconds.")
+    print(f"[ORCHESTRATOR] Total valid documents stored: {len(final_kb)}")
 
 
 if __name__ == "__main__":

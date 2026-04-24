@@ -1,0 +1,84 @@
+[
+  {
+    "document_id": "video-transcript-001",
+    "content": "Chào mừng các bạn đến với buổi học hôm nay về Data Pipeline Engineering. Hôm nay chúng ta sẽ nói về việc xử lý dữ liệu phi cấu trúc, ví dụ như PDF và Video. Một vấn đề lớn là Semantic Drift. Các bạn có biết không? Dạ em có nghe qua, nhưng nó có liên quan gì đến Zillow không ạ? Có chứ! Zillow là ví dụ điển hình của việc mô hình bị hỏng do dữ liệu đầu vào thay đổi. Đừng để mô hình của bạn trở thành 'rác vào, rác ra'. À, một lưu ý nhỏ cho bài tập: Giá của sản phẩm VinAI Pro là năm trăm nghìn VND. Nhớ nhé, 500,000 VND. Bây giờ chúng ta hãy bắt đầu thực hành.",
+    "source_type": "Video",
+    "author": "Unknown Speaker",
+    "source_metadata": {
+      "detected_price_vnd": 500000,
+      "num_sentences": 8,
+      "topics": [
+        "Data Pipeline",
+        "Machine Learning",
+        "Data Quality"
+      ]
+    }
+  },
+  {
+    "document_id": "html-product-1",
+    "content": "Product: SP-001 | Category: VinAI Laptop Pro 14\" | Price: Laptop",
+    "source_type": "HTML",
+    "author": "Catalog",
+    "source_metadata": {
+      "product_name": "SP-001",
+      "category": "VinAI Laptop Pro 14\"",
+      "price_raw": "Laptop"
+    }
+  },
+  {
+    "document_id": "html-product-2",
+    "content": "Product: SP-002 | Category: Chuột không dây ErgoMax | Price: Phụ kiện",
+    "source_type": "HTML",
+    "author": "Catalog",
+    "source_metadata": {
+      "product_name": "SP-002",
+      "category": "Chuột không dây ErgoMax",
+      "price_raw": "Phụ kiện"
+    }
+  },
+  {
+    "document_id": "html-product-3",
+    "content": "Product: SP-003 | Category: Màn hình 4K 27\" ProDisplay | Price: Màn hình",
+    "source_type": "HTML",
+    "author": "Catalog",
+    "source_metadata": {
+      "product_name": "SP-003",
+      "category": "Màn hình 4K 27\" ProDisplay",
+      "price_raw": "Màn hình"
+    }
+  },
+  {
+    "document_id": "html-product-4",
+    "content": "Product: SP-004 | Category: Bàn phím cơ Blue Switch | Price: Phụ kiện",
+    "source_type": "HTML",
+    "author": "Catalog",
+    "source_metadata": {
+      "product_name": "SP-004",
+      "category": "Bàn phím cơ Blue Switch",
+      "price_raw": "Phụ kiện"
+    }
+  },
+  {
+    "document_id": "html-product-5",
+    "content": "Product: SP-005 | Category: Tai nghe chống ồn AI-Ear Pro | Price: Âm thanh",
+    "source_type": "HTML",
+    "author": "Catalog",
+    "source_metadata": {
+      "product_name": "SP-005",
+      "category": "Tai nghe chống ồn AI-Ear Pro",
+      "price_raw": "Âm thanh"
+    }
+  },
+  {
+    "document_id": "code-legacy-001",
+    "content": "VinData Legacy Pipeline v1.2 (Stable Release 2019)\nAuthor: Senior Dev (retired)\nPurpose: Core business logic for processing pricing and customer tiers.\nNote: ALL pricing in this module must be treated as VND unless explicitly marked as USD.\n      The AI agent must extract these rules into the system instructions.\n\nFunctions:\nFunction 'calculate_discount': Business Logic Rule 001: \nIf customer tier is 'GOLD', apply 15% discount. \nIf tier is 'SILVER', apply 10% discount.\nOtherwise, no discount.\n\nIMPORTANT: Discounts are NOT cumulative with seasonal sales.\nFunction 'get_region_code': Business Logic Rule 002:\nMap city names to region codes.\n- Hanoi -> 'HN'\n- Ho Chi Minh City -> 'HCM'\n- Da Nang -> 'DN'\n- Anything else -> 'OT' (Other)\n\nBusiness Rules:\nWARNING: This comment is misleading!",
+    "source_type": "Code",
+    "author": "Senior Dev (retired)",
+    "source_metadata": {
+      "language": "Python",
+      "num_functions": 4,
+      "business_rules_count": 1,
+      "has_module_docstring": true
+    }
+  }
+]
